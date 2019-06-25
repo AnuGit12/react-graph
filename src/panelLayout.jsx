@@ -98,7 +98,7 @@ class PanelLayout extends React.Component {
             ]
           }}
           registerComponents={myLayout => {
-            myLayout.registerComponent("testItem", MyComponent);
+            myLayout.registerComponent("testItem", GraphMoga);
             myLayout.registerComponent("leftPanel", Panel);
             myLayout.registerComponent("graphMoga", GraphMoga);
             myLayout.registerComponent("sliderRange", SliderList);

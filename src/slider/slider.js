@@ -23,7 +23,10 @@ class SliderRange extends Component {
       point4: undefined,
       point5: undefined,
       min: undefined,
-      max: undefined
+      max: undefined,
+      border1:'',
+      border2:''
+
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -102,10 +105,39 @@ class SliderRange extends Component {
     // currentSliderData[sliderName][pointName] = value;
 
     // this.context.updateState({ sliderData });
+    var value = event.target.value;
+   
+    if(value=='input1'){
+
+  
+      if(this.state.point1 >=this.state.point2 || this.state.point1 <= this.state.min){
+        console.log('inside first')
+        this.setState({
+          border1:'1px solid red'
+        })
+      }else{
+        this.setState({
+          border1:''
+        })
+      }
+    }
+    if(value=='input2'){
+    if(this.state.point2 >=this.state.point3 || this.state.point2 <= this.state.point1){
+      console.log('inside second')
+      this.setState({
+        border2:'1px solid red'
+      })
+    }else{
+      this.setState({
+        border2:''
+      })
+    }
+  }
+  
+
 
 
     
-    var value = event.target.value;
     console.log("name of the input",event.target.name)
 
     this.setState({ [pointName]: value });
@@ -143,17 +175,14 @@ class SliderRange extends Component {
   
                 <InputGroup size="sm" style={{ width: '80px', marginLeft: '120px', marginBottom: '5px' }}>
                   <Input name="input1" type="number" onKeyPress={this.onKeyPress.bind(this)} disabled={context.activeSliderName != Object.keys(propsData)[0]} value={this.state.point1}
-                   style={
-                    this.state.point1 >=this.state.point2 || this.state.point1 <= this.state.min ? 
-                    {border: '1px solid red'} :
-                    {}
-                }
+                   style={{border:this.state.border1}}
                    onChange={(e) => this.setInputValue(e, 'point1')}
                    onBlur={() => this.setSliderValueFromInput('point1')}
                     />
                 </InputGroup>
                 <InputGroup size="sm" style={{ width: '80px', marginLeft: '10px', marginBottom: '5px' }}>
                   <Input name="input2" type="number" onKeyPress={this.onKeyPress.bind(this)} disabled={context.activeSliderName != Object.keys(propsData)[0]} value={this.state.point2}
+                    style={{border:this.state.border2}}
                     onChange={(e) => this.setInputValue(e, 'point2')}
                     onBlur={() => this.setSliderValueFromInput('point2')} />
                 </InputGroup>
