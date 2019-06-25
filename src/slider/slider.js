@@ -50,6 +50,12 @@ class SliderRange extends Component {
       return Number(each_element.toFixed(5));
     });
     var new_slider_data = e;
+    var inputValueData = {};
+    _.each(e, (val, i) => {
+      inputValueData['point' + (i+1)] = val
+    });
+
+    this.setState(inputValueData);
     this.context.setValueFromSlider(Object.keys(this.props.propsData)[0], new_slider_data);
 
   }
@@ -106,8 +112,7 @@ class SliderRange extends Component {
   }
 
   setSliderValueFromInput(pointName) {
-    const value =  this.state[pointName]
-      console.log("value fron slllll",value)
+    const value =  this.state[pointName],
           sliderName = _.keys(this.props.propsData)[0];
 
     var sliderData = this.context.sliderData;
@@ -214,12 +219,12 @@ class SliderRange extends Component {
                             {({ handles, getHandleProps }) => (
                               <div className="slider-handles">
                                 {handles.map(handle => (
-                                  <Handle
-                                    key={handle.id}
-                                    handle={handle}
-                                    domain={domain}
-                                    getHandleProps={getHandleProps}
-                                  />
+                                    <Handle
+                                      key={handle.id}
+                                      handle={handle}
+                                      domain={domain}
+                                      getHandleProps={getHandleProps}
+                                    />
                                 ))}
                               </div>
                             )}
