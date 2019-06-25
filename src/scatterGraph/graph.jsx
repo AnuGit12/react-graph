@@ -34,50 +34,63 @@ class GraphMOga extends React.PureComponent {
 
     setGraphData = () => {
       const { xValue, yValue } = this.state;
-      var index_of_slider = (this.context.key).indexOf(this.context.activeSliderName);
-      console.log("index of active slider",index_of_slider)
-      var slider_col = []
-      this.context.data.map((item, key) =>{
-        slider_col.push(item[index_of_slider])
-      });
-      let temp_data= xValue.map((x, i) => ({ x, y: yValue[i]}));
-      var index_of_slider = (this.context.key).indexOf(this.context.activeSliderName);
-      var graphdatanew = temp_data.map((obj,i)=> ({ ...obj, 'row_id': i }))
-      if(this.context.data){
-        graphdatanew.map((val,i) =>{ val.slider_col = this.context.data[i][index_of_slider]});
+      var slider_col = [],
+          index_of_slider;
+
+      if (this.context.activeSliderName == 'Ymax') {
+        slider_col = this.ymaxFinalData;
+      }
+      else {
+        index_of_slider = (this.context.key).indexOf(this.context.activeSliderName);
+        this.context.data.map((item, key) =>{
+          slider_col.push(item[index_of_slider])
+        });
       }
 
-     var slider_val =this.context.sliderData.find(val => val[this.context.activeSliderName]);
-      if (slider_val) {
-        var point1= Object.values(slider_val)[0].point1
-        var point2= Object.values(slider_val)[0].point2
-        var point3= Object.values(slider_val)[0].point3
-        var point4= Object.values(slider_val)[0].point4
-        var point5= Object.values(slider_val)[0].point5
-
-        graphdatanew.map(val => {
-          if (val.slider_col>point1 && val.slider_col<point2 ){
-            return val.fill='#0BAF17';
-          }else if(val.slider_col>point2 && val.slider_col<point3){
-            return val.fill='#276FDA'
-          }else if(val.slider_col>point3 && val.slider_col<point4){
-            return val.fill='#FFA620'
-          }else if(val.slider_col>point4 && val.slider_col<point5){
-            return val.fill='#FF0000'
-          }else{
-            return val.fill='black'
+      if(_.size(slider_col)) {
+        let temp_data= xValue.map((x, i) => ({ x, y: yValue[i]}));
+        var graphdatanew = temp_data.map((obj,i)=> ({ ...obj, 'row_id': i }))
+        if(this.context.data){
+          if (this.context.activeSliderName == 'Ymax') {
+            graphdatanew.map((val,i) =>{ val.slider_col = slider_col[i]});
           }
-        })
-      }
-
-      if (_.size(this.state.xValue) && _.size(this.state.yValue)) {
-        this.data = graphdatanew;
-      }
-      if (this.state.selectValue1) {
-        this.xDomain = [_.min(this.state.xValue), _.max(this.state.xValue)]
-      }
-      if (!this.state.selectValue2) {
-        this.yDomain = [_.min(this.state.yValue), _.max(this.state.yValue)]
+          else {
+            graphdatanew.map((val,i) =>{ val.slider_col = this.context.data[i][index_of_slider]});
+          }
+        }
+  
+       var slider_val =this.context.sliderData.find(val => val[this.context.activeSliderName]);
+        if (slider_val) {
+          var point1= Object.values(slider_val)[0].point1
+          var point2= Object.values(slider_val)[0].point2
+          var point3= Object.values(slider_val)[0].point3
+          var point4= Object.values(slider_val)[0].point4
+          var point5= Object.values(slider_val)[0].point5
+  
+          graphdatanew.map(val => {
+            if (val.slider_col>point1 && val.slider_col<point2 ){
+              return val.fill='#0BAF17';
+            }else if(val.slider_col>point2 && val.slider_col<point3){
+              return val.fill='#276FDA'
+            }else if(val.slider_col>point3 && val.slider_col<point4){
+              return val.fill='#FFA620'
+            }else if(val.slider_col>point4 && val.slider_col<point5){
+              return val.fill='#FF0000'
+            }else{
+              return val.fill='black'
+            }
+          })
+        }
+  
+        if (_.size(this.state.xValue) && _.size(this.state.yValue)) {
+          this.data = graphdatanew;
+        }
+        if (this.state.selectValue1) {
+          this.xDomain = [_.min(this.state.xValue), _.max(this.state.xValue)]
+        }
+        if (!this.state.selectValue2) {
+          this.yDomain = [_.min(this.state.yValue), _.max(this.state.yValue)]
+        }
       }
   }
    
@@ -124,9 +137,6 @@ class GraphMOga extends React.PureComponent {
  //////////////////////////////////////////////////////////////////  To calculate Ymax /////////////////////////////////////////////////////////////
 
  YmaxCall =()=>{
-  this.context.updateState({activeSliderName: "Ymax"})
-   console.log("data++", this.state.data)
-  var csvData = this.context.data
   var ySlider =  this.context.ymax_arr
   var ymaxData =[]
   var temp_data = []
@@ -245,7 +255,7 @@ for(var j=0; j<ymaxData[0].length;j++){
       this.context.updateState({ selected_slider_data: {name: "Ymax", point1: ymax_1, point2: ymax_2, point3: ymax_3, point4: ymax_4,point5: ymax_5} });
       var joined = this.context.sliderData.concat(temp_data);
       // this.setState({ myArray: joined })
-      this.context.updateState({ sliderData: joined });
+      this.context.updateState({ sliderData: joined, activeSliderName: 'Ymax' });
 
       console.log("temp data value from ymax", temp_data)
       console.log("context data",this.context)
@@ -451,13 +461,16 @@ for(var j=0; j<ymaxData[0].length;j++){
                 <Label for="exampleEmail">Color Variables  :</Label>
                 <ButtonGroup>
                   {
-                    _.map(buttonNames, name => 
-                      <Button className="btnColor1" onClick={() => this.context.updateState({activeSliderName: name})}>
-                        {name}
-                      </Button>
+                    _.map(buttonNames, name =>
+                      {
+                        return name == 'Ymax' ? null :
+                          <Button className="btnColor1" onClick={() => this.context.updateState({activeSliderName: name})}>
+                            {name}
+                          </Button>
+                      }
                     )
                   }
-                  <Button className="btnColor" onClick={this.YmaxCall}>Ymax</Button>
+                  { _.size(buttonNames) && _.size(context.ymax_arr) ? <Button className="btnColor" onClick={this.YmaxCall}>Ymax</Button> : null}
                 </ButtonGroup>
               </Row>
               </div>
