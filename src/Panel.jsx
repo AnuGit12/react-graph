@@ -26,7 +26,8 @@ class Panel extends React.PureComponent {
       selected_slider_data: [],
       selected_dots: [],
       modal1:false,
-      save:[]
+      save:[],
+      button_text:'Validate'
 
     };
 
@@ -42,7 +43,10 @@ class Panel extends React.PureComponent {
     this.openState = this.openState.bind(this);
 
   }
+  changeText = (text) => {
 
+    this.setState({ text }); 
+  } 
   toggle() {
     this.setState(prevState => ({
       modal: !prevState.modal
@@ -158,6 +162,7 @@ class Panel extends React.PureComponent {
   //Submit button function
   handlesubmit = (event) => {
     event.preventDefault()
+    
     var input = parseInt(this.state.input)
     var output = parseInt(this.state.output)
     var constraint = parseInt(this.state.constraint)
@@ -182,7 +187,8 @@ class Panel extends React.PureComponent {
       this.context.updateState({ key: arr_final });
 
       this.setState({
-        processing: true
+        processing: true,
+        button_text:"Validated"
       }, () => {
         var temp_data = [];
         const getMatrixColumn = (arr, n) => _.map(arr, x => x[n]);
@@ -277,10 +283,14 @@ class Panel extends React.PureComponent {
       var promises = [Api.openClickedState(id)]
       Promise.all(promises)
       .then((response) => {
-         console.log("mmmm",response)
+        //  console.log("mmmm",response[0].data.input_d,response[0].data.output,response[0].data.constraint)
         this.setState({
           // csvfile:response[0].data.filename,
-          input:response[0].data.input_d
+          input:response[0].data.input_d,
+          // output:response[0].data.output,
+          // constraint:response[0].data.constraint
+          
+
       })
       // this.importCSV()
 
@@ -353,17 +363,17 @@ class Panel extends React.PureComponent {
                   <Row>
                     <InputGroup size="sm" style={{ width: '25%', marginLeft: '15px' }}>
                       <InputGroupAddon addonType="prepend">No of Input</InputGroupAddon>
-                      <Input name="input" onChange={e => this.setState({ input: e.target.value })} />
+                      <Input name="input" onChange={e => this.setState({ input: e.target.value,button_text:"Validate" })} value={this.state.input}/>
                     </InputGroup>
                     <InputGroup size="sm" style={{ width: '25%', marginLeft: '15px' }}>
                       <InputGroupAddon addonType="prepend">No of Output</InputGroupAddon>
-                      <Input name="output" onChange={e => this.setState({ output: e.target.value })} />
+                      <Input name="output" onChange={e => this.setState({ output: e.target.value ,button_text:"Validate" })} value={this.state.output}/>
                     </InputGroup>
                     <InputGroup size="sm" style={{ width: '25%', marginLeft: '15px' }}>
                       <InputGroupAddon addonType="prepend">No of Constraints</InputGroupAddon>
-                      <Input name="constraints" onChange={e => this.setState({ constraint: e.target.value })} />
+                      <Input name="constraints" onChange={e => this.setState({ constraint: e.target.value ,button_text:"Validate" })} value={this.state.constraint}/>
                     </InputGroup>
-                    <Button onClick={e => this.handlesubmit(e)} outline type="submit" color="success" style={{ marginLeft: '15px' }} size="sm">Validate</Button>
+                    <Button onClick={e => this.handlesubmit(e)} outline type="submit" color="success" style={{ marginLeft: '15px' }} size="sm">{this.state.button_text}</Button>
                   </Row>
                 </Form>
               </div>

@@ -192,9 +192,7 @@ class SliderRange extends Component {
                         </InputGroup>
                       </Col>
                       <Col sm='9'
-                        style={{ marginLeft: '40px', width: '100%',
-                                opacity: context.activeSliderName != Object.keys(propsData)[0] ? '0.3' : '1.0'
-                              }}
+                        style={{ marginLeft: '40px', width: '100%'}}
                       >
                         <Slider
                           mode={2}
@@ -205,7 +203,7 @@ class SliderRange extends Component {
                           onUpdate={this.onUpdate}
                           onChange={this.handleChange}
                           values={defaultValues}
-                          disabled={context.activeSliderName != Object.keys(propsData)[0]}
+                          // disabled={context.activeSliderName != Object.keys(propsData)[0]}
                         >
                           <Rail>
                             {({ getRailProps }) => <SliderRail getRailProps={getRailProps} />}
