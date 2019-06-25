@@ -1,0 +1,40 @@
+.first > div{
+    background-color: rgb(11, 175, 23) !important;
+
+}
+
+.second > div{
+    background-color: rgb(39, 111, 218) !important;
+
+}
+
+.third > div{
+    background-color: rgb(255, 166, 32) !important;
+
+}
+
+.four > div{
+    background-color: rgb(255,0,0) !important;
+
+}
+
+.five > div{
+    /* background-color: #ffffff !important; */
+    background-color: rgb(11, 175, 23) !important;
+
+
+}
+
+.form-check-input {
+    
+    width: 22px !important;
+    height: 22px !important;
+    
+}
+
+.form-check{
+    padding-top: 5px !important;
+}
+.chkBtn{
+    padding-top:0px !important
+}

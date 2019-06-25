@@ -1,0 +1,5 @@
+import React, { createContext } from "react";
+
+const SliderContext = createContext();
+
+export default SliderContext;

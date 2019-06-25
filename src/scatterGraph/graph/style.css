@@ -1,0 +1,28 @@
+.Scatterplot {
+  position: relative;
+}
+
+.plot {
+  float: left;
+}
+.plot-title h3 {
+  margin-top: 7px;
+}
+.plot-title p {
+  font-size: 13px;
+}
+.axis-label {
+  font-size: 10px;
+  color: #888;
+}
+.chart-title {
+  font-size: 18px;
+  font-weight: 500;
+}
+.Axis path,
+.Axis line {
+  stroke: #888;
+}
+.Axis text {
+  fill: #888;
+}
