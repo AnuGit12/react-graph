@@ -32,12 +32,9 @@ class GraphMOga extends React.PureComponent {
 
     }
 
-    componentDidUpdate = (prevProps, prevState) => {
+    setGraphData = () => {
       const { xValue, yValue } = this.state;
-      var index_of_slider = (this.context.key).indexOf(this.context.activeSliderName)
-      if (!_.isEqual(this.state.sliderIndex, prevState.sliderIndex)) {
-        this.setState({ sliderIndex: index_of_slider });
-      }
+      var index_of_slider = (this.context.key).indexOf(this.context.activeSliderName);
       console.log("index of active slider",index_of_slider)
       var slider_col = []
       this.context.data.map((item, key) =>{
@@ -76,17 +73,12 @@ class GraphMOga extends React.PureComponent {
       if (_.size(this.state.xValue) && _.size(this.state.yValue)) {
         this.data = graphdatanew;
       }
-      if (!_.isEqual(this.state.selectValue1, prevState.selectValue1)) {
+      if (this.state.selectValue1) {
         this.xDomain = [_.min(this.state.xValue), _.max(this.state.xValue)]
-        this.forceUpdate();
       }
-      if (!_.isEqual(this.state.selectValue2, prevState.selectValue2)) {
+      if (!this.state.selectValue2) {
         this.yDomain = [_.min(this.state.yValue), _.max(this.state.yValue)]
-        this.forceUpdate();
       }
-      // if () {
-      //   this.forceUpdate();
-      // }
   }
    
     toggle() {
@@ -408,7 +400,9 @@ for(var j=0; j<ymaxData[0].length;j++){
 
       const buttonNames = _.flatten(_.map(this.context.sliderData, x => {
         return _.keys(x);
-      }))
+      }));
+
+      this.setGraphData();
       
       return (
         <SliderContext.Consumer>
