@@ -302,8 +302,8 @@ class Panel extends React.PureComponent {
           
 
       // })
-      console.log("csv file name",this.state.csvfile)
-      this.importCSV()
+      // console.log("csv file name",this.state.csvfile)
+      // this.importCSV()
 
         
       })
