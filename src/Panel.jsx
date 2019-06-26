@@ -294,14 +294,15 @@ class Panel extends React.PureComponent {
       .then((response) => {
         //  console.log("mmmm",response[0].data.input_d,response[0].data.output,response[0].data.constraint)
         this.setState({
-          // csvfile:response[0].data.filename,
+          csvfile:response[0].data.filename,
           input:response[0].data.input_d,
-          // output:response[0].data.output,
-          // constraint:response[0].data.constraint
+          output:response[0].data.output,
+          constraint:response[0].data.constraint
           
 
       })
-      // this.importCSV()
+      console.log("csv file name",this.state.csvfile)
+      this.importCSV()
 
         
       })

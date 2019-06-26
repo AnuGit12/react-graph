@@ -79,8 +79,12 @@ def openClickedState():
     # final_data = json.dumps(data)
     filename = target+"/"+data[1]
     filepath = target+"/"+data[0]
-    print("filename", target+"/"+filename)
-    print("text file name",data[0])
+    print("filename", "/"+filename)
+    print("text file name",filepath)
+
+    # os.chdir( target )
+    # result = glob.glob( '*/**.csv' )
+    # print( "---------------",result )
 
     f = open(filename, "r")
     text_file_data = f.read()
@@ -95,7 +99,9 @@ def openClickedState():
     dropdown1 = d['dropdown1']
     dropdown2 = d['dropdown2']
     slidersData = json.loads(d['slidersData'])
-    state_data['filename']=target+"/"+filename
+
+
+    state_data['filename']=filepath
     state_data['input_d']=input_d
     state_data['output']=output
     state_data['constraint']=constraint
