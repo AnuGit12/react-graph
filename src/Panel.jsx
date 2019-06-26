@@ -18,7 +18,6 @@ class Panel extends React.PureComponent {
     super();
     this.state = {
       processing: false,
-      csvfile: undefined,
       input: '',
       output: '',
       constraint: '',
@@ -41,6 +40,7 @@ class Panel extends React.PureComponent {
 
     this.saveState = this.saveState.bind(this);
     this.openState = this.openState.bind(this);
+    this.getClickedState = this.getClickedState.bind(this);
 
   }
   changeText = (text) => {
@@ -71,9 +71,7 @@ class Panel extends React.PureComponent {
 
   openState = (e) =>{
     // e.preventDefault();
-    var promises = [Api.getData()]
-    var saved_state=[]
-    Promise.all(promises)
+    Api.getData()
     .then((response) => {
       console.log("response from flask", typeof(response))
       console.log("response from flask", (response[0].data))
@@ -83,7 +81,7 @@ class Panel extends React.PureComponent {
     //   // this.saved_state = response[0].data
     //   console.log("array",saved_state)
       this.setState({
-        save:response[0].data
+        save:response
       })
       // response[0].data.map((item,key)=>{
       //   console.log("ttttt>>>",item)
@@ -253,7 +251,6 @@ class Panel extends React.PureComponent {
     
 
     const { csvfile } = this;
-
     Papa.parse(csvfile, {
       complete: this.updateData,
       header: false
@@ -282,6 +279,29 @@ class Panel extends React.PureComponent {
     this.setState({
       processing: false
     })
+  }
+
+  getClickedState=(id)=>{
+    console.log("::::::***",id)
+    Api.openClickedState(id)
+    .then((response) => {
+      //  console.log("mmmm",response[0].data.input_d,response[0].data.output,response[0].data.constraint)
+      this.csvfile = response.filename;
+      this.setState({
+        input:response.input_d,
+        output:response.output,
+        constraint:response.constraint
+    })
+
+    console.log("csv file name",this.state.csvfile)
+    this.importCSV()
+    })
+    .catch((error) => {
+      console.log("error in clicked")
+    })
+    this.toggle1()
+    console.log("file----", this.state.csvfile)
+    // this.importCSV()
   }
 
   render() {
@@ -436,12 +456,11 @@ class Panel extends React.PureComponent {
           <ModalBody>
           <ListGroup>
                 {
-                  this.state.save.map(function(item, i){
-                    
+                  this.state.save.map((item, i) => {
                     return( 
                     <ListGroupItem key={i}>{item}
                       <div style={{float:'right'}} >
-                        <Button color="warning" onClick={() => getClickedState(item)}>Open</Button>{' '}
+                        <Button color="warning" onClick={() => this.getClickedState(item)}>Open</Button>{' '}
                         <Button color="danger">Delete</Button>{' '}
                       </div>
                     </ListGroupItem>

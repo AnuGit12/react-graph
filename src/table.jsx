@@ -7,7 +7,7 @@ class TableComponent extends React.PureComponent {
 
   //setting color to table's row after clicking on any dot or selecting with lasso selector
   rowFunction = (i) => {
-    if (i === this.props.selected_row) {
+    if (_.includes(this.props.selected_row, i)) {
       return 'yellow'
     } else {
       return "white"
