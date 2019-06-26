@@ -198,14 +198,22 @@ class Panel extends React.PureComponent {
             var x1, x2, Xrange, x1_1, x1_2, x1_3, x1_4, x1_5,x1_min,x2_max
 
             var columnArray = getMatrixColumn(this.data, j);
+            console.log("temp-data-is-here",columnArray)
             x1 = _.floor(_.min(columnArray), 6);   //getting min value of slider
-            x2 = _.floor(_.max(columnArray), 6);   //getting max value of slider
+            console.log("temp-data-is-here",x1)
+            x2 = _.floor(_.max(columnArray), 6); 
+            console.log("temp-data-is-here",x2)
+              //getting max value of slider
             Xrange = _.floor((x2 - x1), 6);
+            console.log("temp-data-is-hereXrangw",Xrange)
             x1_min = x1 - 0.1*(x2 - x1)
             x2_max = x2 + 0.1*(x2 - x1)
             // console.log("@@@",x1,x2,Xrange)
             x1_1 = x1 + 0.1 * Xrange;  //setting slider handle points values
+            console.log("temp-data-is-herex1_1",x1_1)
             x1_2 = x1 + 0.3 * Xrange;  //setting slider handle points values
+            console.log("temp-data-is-herex1_2",x1_2)
+
             x1_3 = x1 + 0.5 * Xrange;  //setting slider handle points values
             x1_4 = x1 + 0.7 * Xrange;  //setting slider handle points values
             x1_5 = x1 + 0.9 * Xrange;  //setting slider handle points values
@@ -220,6 +228,7 @@ class Panel extends React.PureComponent {
                 "point5": x1_5
               }
             });
+            console.log("temp-data-is-here",temp_data)
           });
 
 
@@ -279,7 +288,7 @@ class Panel extends React.PureComponent {
     console.log(this.context.selected_dots, 'selected_dots');
     var contentMarkup;
     var getClickedState=(id)=>{
-      console.log("::::::*****",id)
+      console.log("::::::***",id)
       var promises = [Api.openClickedState(id)]
       Promise.all(promises)
       .then((response) => {
@@ -380,7 +389,7 @@ class Panel extends React.PureComponent {
               {contentMarkup}
               {
                 _.size(this.context.lassoSelectedRows) ?
-                <div>
+                <div className="tblscrl">
                   <h5>Lasso table</h5>
                   <Table bordered>
                     <thead style={{ backgroundColor: '#80bfff', borderColor: '#333' }}>

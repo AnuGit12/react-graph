@@ -22,7 +22,7 @@ export default class Header extends React.Component {
     return (
       <div>
         <Navbar style={{backgroundColor:'#009688', color:'#fff'}} light expand="md">
-          <NavbarBrand href="/"><h3>Moga Visualizer</h3></NavbarBrand>
+          <NavbarBrand href="/"><h3 style={{color:'#ffffff'}}>Moga Visualizer</h3></NavbarBrand>
           
         </Navbar>
       </div>

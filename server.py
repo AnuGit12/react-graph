@@ -7,6 +7,7 @@ from flask_cors import CORS
 import ast
 import json
 # import csv 
+import glob
 from werkzeug.utils import secure_filename
 
 
@@ -51,9 +52,15 @@ def saveSliderData():
 
 @app.route("/get-data", methods = ['GET'])
 def getData():
-    print(">?>?>?>?>?>?>?>?>?>?>?>?>",os.listdir(UPLOAD_FOLDER))
+    # print(">?>?>?>?>?>?>?>?>?>?>?>?>",os.listdir(glob.glob(os.path.join(UPLOAD_FOLDER, '*'))))
     data = os.listdir(UPLOAD_FOLDER)
-    final_data = json.dumps(data)
+    saved_state=[]
+    for item in os.listdir(UPLOAD_FOLDER):
+        if not item.startswith('.'):
+            print (type(item))
+            saved_state.append(item)
+    print("final saved state============", saved_state)
+    final_data = json.dumps(saved_state)
     return final_data
 
 
@@ -68,14 +75,16 @@ def openClickedState():
     print("request data",target)
 
     data = os.listdir(target)
+    print ("data>>>>>>>",data)
     # final_data = json.dumps(data)
-    filename = data[1]
+    filename = target+"/"+data[1]
     filepath = target+"/"+data[0]
     print("filename", target+"/"+filename)
     print("text file name",data[0])
 
-    f = open(filepath, "r")
+    f = open(filename, "r")
     text_file_data = f.read()
+    print(":::::::::",text_file_data)
     d = json.loads(text_file_data)
 
     print("type of data", type(d))
@@ -93,7 +102,7 @@ def openClickedState():
     state_data['dropdown1']=dropdown1
     state_data['dropdown2']=dropdown2
     state_data['slidersData']=slidersData
-    print(state_data)
+    print("???",state_data)
     final_data = json.dumps(state_data)
 
     return final_data

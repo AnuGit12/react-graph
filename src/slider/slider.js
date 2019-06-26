@@ -25,7 +25,11 @@ class SliderRange extends Component {
       min: undefined,
       max: undefined,
       border1:'',
-      border2:''
+      border2:'',
+      border3:'',
+      border4:'',
+      border5:''
+
 
     };
 
@@ -94,26 +98,25 @@ class SliderRange extends Component {
 
   setInputValue(event, pointName) {
 
-    // const value =  this.state[pointName],
-    //       sliderName = _.keys(this.props.propsData)[0];
-
-    // var sliderData = this.context.sliderData;
-    // var currentSliderData = _.find(sliderData, data => {
-    //   return _.keys(data)[0] === sliderName;
-    // });
-
-    // currentSliderData[sliderName][pointName] = value;
-
-    // this.context.updateState({ sliderData });
+    
     var value = event.target.value;
+    // var p1 = this.state.point1
+
+    // const value =  this.state[pointName],
+          // sliderName = Object.keys(propsData)[0]
+
+          // console.log("++++", sliderName)
+      console.log("Pointsmane",pointName)
    
-    if(value=='input1'){
+    if(pointName=='point1'){
+      console.log("inside input1>>>>>>>>>>>>>>>",this.state.point1,this.state.point2,this.state.min)
 
   
-      if(this.state.point1 >=this.state.point2 || this.state.point1 <= this.state.min){
+      if(value >=this.state.point2 || value <= this.state.min){
         console.log('inside first')
         this.setState({
-          border1:'1px solid red'
+          border1:'1px solid red',
+          // point1:p1
         })
       }else{
         this.setState({
@@ -121,8 +124,10 @@ class SliderRange extends Component {
         })
       }
     }
-    if(value=='input2'){
-    if(this.state.point2 >=this.state.point3 || this.state.point2 <= this.state.point1){
+    if(pointName=='point2'){
+      console.log("inside input2>>>>>>>>>>>>>>>|||||||||||||||||||||||||",this.state.point2,this.state.point3,value)
+
+    if(value >=this.state.point3 || value <= this.state.point1){
       console.log('inside second')
       this.setState({
         border2:'1px solid red'
@@ -133,25 +138,76 @@ class SliderRange extends Component {
       })
     }
   }
+  if(pointName=='point3'){
+    // console.log("inside input2>>>>>>>>>>>>>>>|||||||||||||||||||||||||",this.state.point2,this.state.point3,value)
+
+  if(value >=this.state.point4 || value <= this.state.point2){
+    console.log('inside second')
+    this.setState({
+      border3:'1px solid red'
+    })
+  }else{
+    this.setState({
+      border3:''
+    })
+  }
+}
+if(pointName=='point4'){
+  // console.log("inside input2>>>>>>>>>>>>>>>|||||||||||||||||||||||||",this.state.point2,this.state.point3,value)
+
+if(value >=this.state.point5 || value <= this.state.point3){
+  console.log('inside fourt')
+  this.setState({
+    border4:'1px solid red'
+  })
+}else{
+  this.setState({
+    border4:''
+  })
+}
+}
+if(pointName=='point5'){
+  // console.log("inside input2>>>>>>>>>>>>>>>|||||||||||||||||||||||||",this.state.point2,this.state.point3,value)
+
+if(value >=this.state.max || value <= this.state.point4){
+  console.log('inside second')
+  this.setState({
+    border5:'1px solid red'
+  })
+}else{
+  this.setState({
+    border5:''
+  })
+}
+}
   
 
 
 
     
     console.log("name of the input",event.target.name)
+    var sliderData = this.context.sliderData;
+    var sliderName = Object.keys(this.props.propsData)[0]
+    // this.setSliderValueFromInput(pointName)
 
     this.setState({ [pointName]: value });
   }
 
   setSliderValueFromInput(pointName) {
+    console.log("pointName",pointName)
+    console.log("pointName",this.state[pointName])
+    
     const value =  this.state[pointName],
           sliderName = _.keys(this.props.propsData)[0];
+          console.log("+++++++",value, sliderName)
+          console.log("sliderName___",value)
 
     var sliderData = this.context.sliderData;
     var currentSliderData = _.find(sliderData, data => {
+      // console.log(sliderData,"?WWE")
       return _.keys(data)[0] === sliderName;
     });
-
+    console.log("value+++++++",currentSliderData[sliderName][pointName])
     currentSliderData[sliderName][pointName] = value;
 
     this.context.updateState({ sliderData });
@@ -188,17 +244,20 @@ class SliderRange extends Component {
                 </InputGroup>
                 <InputGroup size="sm" style={{ width: '80px', marginLeft: '10px', marginBottom: '5px' }}>
                   <Input name="input3" type="number" onKeyPress={this.onKeyPress.bind(this)} disabled={context.activeSliderName != Object.keys(propsData)[0]} value={this.state.point3}
-                    onChange={(e) => this.setInputValue(e, 'point3')}
+                    style={{border:this.state.border3}}
+                   onChange={(e) => this.setInputValue(e, 'point3')}
                     onBlur={() => this.setSliderValueFromInput('point3')} />
                 </InputGroup>
                 <InputGroup size="sm" style={{ width: '80px', marginLeft: '10px', marginBottom: '5px' }}>
                   <Input name="input4" type="number" onKeyPress={this.onKeyPress.bind(this)} disabled={context.activeSliderName != Object.keys(propsData)[0]} value={this.state.point4}
+                     style={{border:this.state.border4}}
                     onChange={(e) => this.setInputValue(e, 'point4')}
                     onBlur={() => this.setSliderValueFromInput('point4')} />
                 </InputGroup>
                 <InputGroup size="sm" style={{ width: '80px', marginLeft: '10px', marginBottom: '5px' }}>
                   <Input name="input5" type="number" onKeyPress={this.onKeyPress.bind(this)} disabled={context.activeSliderName != Object.keys(propsData)[0]} value={this.state.point5}
-                    onChange={(e) => this.setInputValue(e, 'point5')}
+                    style={{border:this.state.border5}}
+                   onChange={(e) => this.setInputValue(e, 'point5')}
                     onBlur={() => this.setSliderValueFromInput('point5')} />
                 </InputGroup>
               </Row>
