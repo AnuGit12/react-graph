@@ -16,7 +16,10 @@ UPLOAD_FOLDER = 'saved_state'
 CORS(app)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
+import sys
 
+print('This is error output', file=sys.stderr)
+print('This is standard output', file=sys.stdout)
 
 
 
@@ -30,7 +33,7 @@ def index():
 @app.route("/table-data-save", methods = ['POST'])
 def saveTableData():
     table_data = request.files
-    # print("is file", request.files)
+    
     target=os.path.join(UPLOAD_FOLDER,'test_docs')
     if not os.path.isdir(target):
         os.mkdir(target)
@@ -52,14 +55,12 @@ def saveSliderData():
 
 @app.route("/get-data", methods = ['GET'])
 def getData():
-    # print(">?>?>?>?>?>?>?>?>?>?>?>?>",os.listdir(glob.glob(os.path.join(UPLOAD_FOLDER, '*'))))
     data = os.listdir(UPLOAD_FOLDER)
     saved_state=[]
     for item in os.listdir(UPLOAD_FOLDER):
         if not item.startswith('.'):
             print (type(item))
             saved_state.append(item)
-    print("final saved state============", saved_state)
     final_data = json.dumps(saved_state)
     return final_data
 
@@ -71,28 +72,22 @@ def openClickedState():
     data1 = request.args.get('id')
     # dataDict = json.loads(data)
     target=os.path.join(UPLOAD_FOLDER,data1)
-
-    print("request data",target)
-
     data = os.listdir(target)
-    print ("data>>>>>>>",data)
-    # final_data = json.dumps(data)
+    data=[]
+    for item in os.listdir(target):
+        if not item.startswith('.'):
+            print (type(item))
+            data.append(item)
+    print("data",data)
     filename = target+"/"+data[1]
     filepath = target+"/"+data[0]
-    print("filename", "/"+filename)
-    print("text file name",filepath)
-
-    # os.chdir( target )
-    # result = glob.glob( '*/**.csv' )
-    # print( "---------------",result )
-
+    print("filename", filepath)
     f = open(filename, "r")
     text_file_data = f.read()
-    print(":::::::::",text_file_data)
+    print (type(text_file_data))
+    print(text_file_data)
     d = json.loads(text_file_data)
 
-    print("type of data", type(d))
-    print("data_____", d['state_name'])
     input_d= d['input']
     output= d['output']
     constraint = d['constraint']
@@ -108,39 +103,30 @@ def openClickedState():
     state_data['dropdown1']=dropdown1
     state_data['dropdown2']=dropdown2
     state_data['slidersData']=slidersData
-    print("???",state_data)
-    final_data = json.dumps(state_data)
+    state_data['csv']=send_file(filepath, attachment_filename='small.csv', as_attachment=True)
+    print(" ---------------")
+    print(type(state_data))
+    # final_data = json.dumps(state_data)
 
-    # return final_data
-    try:
-        return send_file(filepath, attachment_filename='small.csv', as_attachment=True)
-    except Exception as e:
-        return "errrrrooooorrr-----------------------"
+    return str(state_data)
 
-
-
+    # try:
+    #     print("response sent")
+    #     return send_file(filepath, attachment_filename='big.csv', as_attachment=True)
+    # except Exception as e:
+    #     print ("error in response")
+    #     return str(e)
 @app.route("/save-other-data", methods = ['GET', 'POST'])
 def saveOtherData():
     
     # print("file name is", file)
     state_name = request.form['state_name']
-    print(">>>>>>>>>>>>.",state_name)
     input_data = request.form['input']
-    print(">>>>>>>>>>>>>>>>>>............",input_data)
     output_data = request.form['output']
-    print(">>>>>>>>>>>>>>>>>>>>>>>>.................",output_data)
     const_data = request.form['constraint']
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>............................",const_data)
-
     dropdown1 = request.form['dropdown1']
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>............................",dropdown1)
     dropdown2 = request.form['dropdown2']
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>..................................",dropdown2)
-
     slidersData = request.form['slidersData']
-
-
-    # print(">>>>>>>>>>>>>>>>>>..",dropdown)
     data = {}
     data['state_name']=state_name
     data['input']=input_data
@@ -150,51 +136,20 @@ def saveOtherData():
     data['dropdown2']=dropdown2
     data['slidersData'] = slidersData
 
-    print(">>>>>>))))))))))))))))(((((((((((((((((")
     
     target=os.path.join(UPLOAD_FOLDER,state_name)
-    print(">>>>>>",target)
     if not os.path.isdir(target):
-        print('creating path++++++++++')
         os.mkdir(target)
 
     file = request.files['file'] 
-    print('1')
     filename = secure_filename(file.filename)
-    print('2')
-
     destination="/".join([target, filename])
-    print('3')
-
     destinationJson = "/".join([target, state_name+".txt"])
-    print('4',destinationJson)
-
-    print("destination", destination)
     file.save(destination)
-    print('5')
 
     with open(destinationJson, 'w') as f:
         json.dump(data, f, ensure_ascii=False)
 
-    
-
-    # print("is file 3", request.files)
-    # state_name = ast.literal_eval(data)
-    # dic = json.loads(data)
-    # print("dic", dic)
-    # print(">",dic.h)
-    # print("data>>>>>>.",type(data))
-    # print("data>>>>>>.>>>>>>>>>>>>>>>>>>>>.",data)
-    # print("data>>>>>>.",data)
-
-
-
-    # state_name = data['state_name']
-    # input_data = dic['input']
-    # output_data = dic['output']
-    # const_data = dic['constraint']
-    # dropdown_1 = dic['dropdown']['selectedDropdown']['1']
-    # dropdown_2 = dic['dropdown']['selectedDropdown']['2']
     return "Hello World!"
 
 
