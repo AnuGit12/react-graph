@@ -9,8 +9,8 @@ import json
 # import csv 
 import glob
 from werkzeug.utils import secure_filename
-
-
+from flask import send_from_directory
+from flask import send_file
 app = Flask(__name__)
 UPLOAD_FOLDER = 'saved_state'
 CORS(app)
@@ -111,7 +111,11 @@ def openClickedState():
     print("???",state_data)
     final_data = json.dumps(state_data)
 
-    return final_data
+    # return final_data
+    try:
+        return send_file(filepath, attachment_filename='small.csv', as_attachment=True)
+    except Exception as e:
+        return "errrrrooooorrr-----------------------"
 
 
 
