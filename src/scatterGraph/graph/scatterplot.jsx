@@ -56,6 +56,7 @@ class Scatterplot extends React.Component {
 				this.context.updateState({
 					lassoSelectedRows: lassoSelectedDots
 				})
+				this.context.getRowFromClickOnGraphDot(lassoSelectedDots);
 			}
 	}.bind(this);
 	
@@ -75,7 +76,7 @@ class Scatterplot extends React.Component {
 
 	onClickCircle(i) {
 		var selectedRow = this.props.data[i];
-		this.context.getRowFromClickOnGraphDot(selectedRow.row_id);
+		this.context.getRowFromClickOnGraphDot([selectedRow.row_id]);
 	}
 
 	render() {
