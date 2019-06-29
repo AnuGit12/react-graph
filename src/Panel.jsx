@@ -41,12 +41,32 @@ class Panel extends React.PureComponent {
     this.saveState = this.saveState.bind(this);
     this.openState = this.openState.bind(this);
     this.getClickedState = this.getClickedState.bind(this);
-
   }
+
+  componentDidMount() {
+    if (this.props.container && this.props.container._config.componentState) {
+      var state = this.props.container._config.componentState;
+      this.data = state.data;
+      this.context.key = state.key;
+      this.forceUpdate();
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.props.container) {
+      var stateObj = {
+        data: this.data,
+        key: this.context.key
+      }
+
+      this.props.container.extendState(stateObj);
+    }
+  }
+
   changeText = (text) => {
 
-    this.setState({ text }); 
-  } 
+    this.setState({ text });
+  }
   toggle() {
     this.setState(prevState => ({
       modal: !prevState.modal
@@ -248,7 +268,7 @@ class Panel extends React.PureComponent {
   //parsing csv file
   importCSV = () => {
     this.setState({ processing: true });
-    
+
 
     const { csvfile } = this;
     Papa.parse(csvfile, {
@@ -367,7 +387,7 @@ class Panel extends React.PureComponent {
     return (
       <Row className="panelContainer">
         <Col md="12">
-          <Card body outline >
+          <Card body outline >  
             <div className="App">
               <div>
                 <h4>Import moga file</h4>
