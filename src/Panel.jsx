@@ -48,15 +48,21 @@ class Panel extends React.PureComponent {
       var state = this.props.container._config.componentState;
       this.data = state.data;
       this.context.key = state.key;
-      this.forceUpdate();
+      this.setState({
+        input: state.input, output: state.output,
+        constraint: state.constraint, fileName: state.fileName
+      })
     }
   }
 
   componentDidUpdate() {
+    const { input, output, constraint, fileName } = this.state;
+
     if (this.props.container) {
       var stateObj = {
         data: this.data,
-        key: this.context.key
+        key: this.context.key,
+        input, output, constraint, fileName
       }
 
       this.props.container.extendState(stateObj);
@@ -262,7 +268,7 @@ class Panel extends React.PureComponent {
 
   handleChange = event => {
     this.csvfile = event.target.files[0];
-    console.log("file from input",event.target.files[0])
+    this.setState({ fileName: this.csvfile.name });
   };
 
   //parsing csv file
@@ -387,22 +393,25 @@ class Panel extends React.PureComponent {
     return (
       <Row className="panelContainer">
         <Col md="12">
-          <Card body outline >  
+          <Card body outline >
             <div className="App">
               <div>
                 <h4>Import moga file</h4>
                 <Row style={{ marginBottom: '15px' }}>
                 <form>
-                  <input className="csv-input"
+                  <input id="file-upload"
                     type="file"
                     ref={input => {
                       this.filesInput = input;
                     }}
                     name="file"
-                    placeholder={null}
                     onChange={this.handleChange}
-                    style={{ marginLeft: '15px' }}
+                    style={{ display: 'none' }}
                   />
+                  <input type="button" style={{ marginLeft: '15px' }}
+                    value={this.state.fileName ? 'Selected file:' : 'Browse...'}
+                    onClick={() => document.getElementById('file-upload').click()} />
+                  <span style={{ marginLeft: '10px' }}>{this.state.fileName}</span>
                   
                   <p />
                   <Button  color="success" onClick={this.importCSV} style={{ marginLeft: '15px' }} size="sm">Submit</Button>{' '}

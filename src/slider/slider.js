@@ -268,6 +268,7 @@ if(value >=this.state.max || value <= this.state.point4){
                     <FormGroup check>
                       <Label check>
                         <Input type="radio"
+                          checked={Object.keys(propsData)[0] == this.context.activeSliderName}
                           name="checkbox"
                           value={Object.keys(propsData)[0]}
                           onChange={e => this.handleChangeSlide(e)}
